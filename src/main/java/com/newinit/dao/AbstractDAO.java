@@ -30,7 +30,19 @@ public class AbstractDAO<T extends Serializable> {
         return query.getResultList();
     }
 
+    public T findId(int id) {
+        return em.find(clazz, id);
+    }
+
     public void merge(T entity) {
         em.merge(entity);
+    }
+
+    public void persist(T entity) {
+        em.persist(entity);
+    }
+
+    public void remove(T entity) {
+        em.remove(entity);
     }
 }

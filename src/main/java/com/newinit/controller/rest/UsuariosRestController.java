@@ -10,9 +10,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -33,6 +35,17 @@ public class UsuariosRestController {
         JsonResponseView json = new JsonResponseView();
         try {
             userservices.merge(usercreate);
+        } catch (NoResultException ex) {
+            log.error("Error-Rest-Testing:");
+            json.getResponse().put("success", false);
+        }
+        return json;
+    }
+    @RequestMapping(value = "findId.do/{idUser}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResponseView findId(HttpServletRequest request,@PathVariable(name = "idUser") Integer idUser) {
+        JsonResponseView json = new JsonResponseView();
+        try {
+            json.getResponse().put("User",userservices.findId(idUser));
         } catch (NoResultException ex) {
             log.error("Error-Rest-Testing:");
             json.getResponse().put("success", false);

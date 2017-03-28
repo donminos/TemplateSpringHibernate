@@ -20,9 +20,10 @@ $('body').ready(function () {
                     $(this).html(window[$(this).attr('entity')]);
                 }
             });
-            $('#loader-wrapper').css('display','none');
+            $('#loader-wrapper').css('display', 'none');
             try {
                 table = $('#table').DataTable({
+                    "responsive": true,
                     "info": false,
                     "pagingType": "full_numbers",
                     "columnDefs": [{
@@ -49,14 +50,15 @@ function createCall(idForm, callback) {
             } else {
                 param [$(input)[0].attributes.subobject.value][$(input).attr('name')] = $(input).val();
             }
+        } else if ($(input).attr('list') == 'true') {
+            if (param [$(input).attr('name')] == undefined)
+                param [$(input).attr('name')] = [];
+            param [$(input).attr('name')].push(parseInt($(input).val()));
+            console.log($(input).val());
         } else {
             if ($(input).attr('type') == 'checkbox') {
                 param [$(input).attr('name')] = $(input)[0].checked;
                 console.log($(input)[0].checked);
-            } else if ($(input).attr('type') == 'hidden') {
-                header = $(input).val();
-                header = $("meta[name='_csrf']").attr("content");
-                console.log($(input).val());
             } else {
                 param [$(input).attr('name')] = $(input).val();
                 console.log($(input).val());
@@ -65,17 +67,17 @@ function createCall(idForm, callback) {
     });
     callWebservices($('#' + idForm).attr('method'), $('#' + idForm).attr('action'), header, param, callback);
 }
-function callWebservices(method, url, header, param, callback) {
+function callWebservices(method, url, param, callback) {
     $.ajax({
         type: method, //POST,GET,PUT,ETC
         url: url,
         dataType: "json",
         context: this,
         headers: {
-            'X-CSRF-TOKEN': header,
+            'X-CSRF-TOKEN': $("meta[name='_csrf']").attr("content"),
             'Content-Type': "application/json;charset=UTF-8"
         },
-        data: param != {} ? JSON.stringify(param) : '',
+        data: ((param!=undefined && param!={}) ? JSON.stringify(param) : ''),
         success: function (data) {
             callback(data);
         }
@@ -102,4 +104,29 @@ function crear() {
             }
         }
     });
+}
+function modPerfil() {
+    callWebservices('GET', 'usuarios/findId.do/'+$('input:checked').val(),null, function (data) {
+        debugger;
+        $.fancybox.open({
+            src: '#form-create',
+            type: 'inline',
+            opts: {
+                onComplete: function () {
+                    console.info('done!');
+                }
+            }
+        });
+    });
+
+}
+function showHidden(obj) {
+    if ($('input[name=' + obj.name + ']:checked').length === 1) {
+        $('#editaritem').css('display', 'inline');
+    } else {
+        $('#editaritem').css('display', 'none');
+    }
+}
+function deletePerfil(obj) {
+
 }

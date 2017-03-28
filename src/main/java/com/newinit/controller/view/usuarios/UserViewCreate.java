@@ -1,7 +1,7 @@
-
 package com.newinit.controller.view.usuarios;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -21,7 +21,15 @@ public class UserViewCreate implements Serializable {
     @Size(min = 8, max = 45)
     private String password;
 
-    private String token;
+    private List<Integer> roles;
+
+    public List<Integer> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Integer> roles) {
+        this.roles = roles;
+    }
 
     public Integer getIdUser() {
         return idUser;
@@ -46,13 +54,4 @@ public class UserViewCreate implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
 }

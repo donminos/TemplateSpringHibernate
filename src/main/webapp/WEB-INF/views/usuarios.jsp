@@ -22,13 +22,13 @@
         <section>
 
             <article>
-                <table id="table" class="display" width="100%" cellspacing="0" data-page-length="6">
+                <table id="table" class="display" width="100%" cellspacing="0" data-page-length="10">
                     <thead>                        
                         <tr>
                             <th class="no-sort"><label>Seleccionar</label></th>
                             <th>Id</th>
                             <th>Usuario</th>
-                            <th>token</th>
+                            <th>Rol</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -36,20 +36,28 @@
                             <th></th>
                             <th>Id</th>
                             <th>Usuario</th>
-                            <th>token</th>
+                            <th>Rol</th>
                         </tr>
                     </tfoot>
                     <tbody id="body-users">
-                    <c:if test="${not empty users}">
-                        <c:forEach var="value" items="${users}">
-                            <tr>
-                                <td valign="top"><input name="usuario" type="checkbox" style="margin-left:30%" onchange="editarOcultar()" value="${value.idUser}"></td>
-                                <td valign="top">${value.idUser}</td>
-                                <td valign="top">${value.user}</td>
-                                <td valign="top">${value.token}</td>
-                            </tr>
-                        </c:forEach>
-                    </c:if>
+                        <c:if test="${not empty users}">
+                            <c:forEach var="value" items="${users}">
+                                <tr>
+                                    <td valign="top"><input name="usuario" type="checkbox" style="margin-left:30%" onchange="showHidden(this)" value="${value.idUser}"></td>
+                                    <td valign="top">${value.idUser}</td>
+                                    <td valign="top">${value.user}</td>
+                                    <td valign="top">
+                                        <ul>
+                                            <c:if test="${not empty value.roles}">
+                                                <c:forEach var="rol" items="${value.roles}">
+                                                    <li>${rol}</li>
+                                                    </c:forEach>
+                                                </c:if>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:if>
                     </tbody>
                 </table>
             </article>
@@ -78,18 +86,16 @@
                             </tr>
                             <tr class="popup">
                                 <td>
-                                    <select>
-                                        <c:if test="${not empty users}">
-                                            <c:forEach var="value" items="${Roles}">
-                                                <option value="${value.idRol}">${value.description}</option>
-                                            </c:forEach>
-                                        </c:if>
-                                    </select>
+                                    <c:if test="${not empty users}">
+                                        <c:forEach var="value" items="${Roles}">
+                                            <input name="roles" list="true" type="checkbox" value="${value.idRol}">${value.description}
+                                        </c:forEach>
+                                    </c:if>
                                 </td>
                             </tr>
                         </table>
                         <!--<input id="crear-user" type="submit" id="btnActualizarGuardar" value="Agregar" class="popup"/>-->
-                        <input type="button" id="btnActualizarGuardar" value="Agregar" class="popup" onclick="createCall('form-send', null)"/>
+                        <input type="button" id="btnActualizarGuardar" value="Agregar" class="popup" onclick="createCall('form-send', successSaved)"/>
                         <div  class="msg-status-perfil"></div>  
                         <!-- 
                         <div class="msg-status"></div>
@@ -99,5 +105,6 @@
             </article>
         </section>
         <%@include file="Template/footer.jsp" %>
+        <script src="resources/js/usuarios.js" type="text/javascript"></script>
     </body>
 </html>

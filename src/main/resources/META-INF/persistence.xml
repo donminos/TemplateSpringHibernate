@@ -3,6 +3,8 @@
   <persistence-unit name="Template-UP" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <!--<non-jta-data-source>jdbc/gastos</non-jta-data-source>-->
+    <class>com.newinit.entity.Users</class>
+    <class>com.newinit.entity.Roles</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <validation-mode>NONE</validation-mode>
     <properties>

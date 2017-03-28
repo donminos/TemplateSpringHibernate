@@ -11,12 +11,13 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -58,8 +59,8 @@ public class Users implements Serializable {
     @Size(max = 45)
     @Column(name = "Token")
     private String token;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
-    private List<UserRol> userRolList;
+    @ManyToMany(mappedBy = "usersList", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Roles> rolesList;
 
     public Users() {
     }
@@ -108,12 +109,12 @@ public class Users implements Serializable {
 
     @XmlTransient
     @JsonIgnore
-    public List<UserRol> getUserRolList() {
-        return userRolList;
+    public List<Roles> getRolesList() {
+        return rolesList;
     }
 
-    public void setUserRolList(List<UserRol> userRolList) {
-        this.userRolList = userRolList;
+    public void setRolesList(List<Roles> rolesList) {
+        this.rolesList = rolesList;
     }
 
     @Override

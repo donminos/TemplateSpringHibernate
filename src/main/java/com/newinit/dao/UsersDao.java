@@ -1,5 +1,6 @@
 package com.newinit.dao;
 
+import com.newinit.entity.Roles;
 import com.newinit.entity.Users;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -26,5 +27,15 @@ public class UsersDao extends AbstractDAO<Users> {
         Query query = em.createQuery("SELECT u FROM Users u WHERE u.user=:username", Users.class);
         query.setParameter("username", username);
         return (Users) query.getSingleResult();
+    }
+
+    public void mergeCascade(Users user) {
+        Users newuser=em.merge(user);
+        for(Roles rol:user.getRolesList()){
+            Query query=em.createNativeQuery("INSERT INTO Permissions (idUser, idRol) VALUES (?, ?)");
+            query.setParameter(1,newuser.getIdUser());
+            query.setParameter(2,rol.getIdRol());
+            query.executeUpdate();
+        }
     }
 }
